@@ -26,6 +26,7 @@ namespace HR.API
 
             var signingKey = new HmacSigningCredentials(_secret);
             var issued = data.Properties.IssuedUtc;
+            data.Properties.ExpiresUtc = data.Properties.ExpiresUtc.Value.AddDays(15);
             var expires = data.Properties.ExpiresUtc;
 
             return new JwtSecurityTokenHandler().WriteToken(new JwtSecurityToken(_issuer, "Any", data.Identity.Claims, issued.Value.UtcDateTime, expires.Value.UtcDateTime, signingKey));

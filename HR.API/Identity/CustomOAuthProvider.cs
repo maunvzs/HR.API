@@ -19,7 +19,7 @@ namespace HR.API
             context.OwinContext.Response.Headers.Add("Access-Control-Allow-Origin", new[] { "*" });
 
             var user = context.OwinContext.Get<HRContext>().UserEntity.FirstOrDefault(u => u.Email == context.UserName);
-            if (!context.OwinContext.Get<HRContext>().CheckPassword(user, context.Password))
+            if (!context.OwinContext.Get<HRContext>().CheckPasswordAsync(user, context.Password))
             {
                 context.SetError("invalid_grant", "The user name or password is incorrect");
                 context.Rejected();

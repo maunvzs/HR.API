@@ -146,12 +146,16 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Context\Configuration.cs" />
     <Compile Include="Context\HRContext.cs" />
+    <Compile Include="Context\HRContextModelBuilder.cs" />
+    <Compile Include="Context\HRDBInitializer.cs" />
     <Compile Include="Context\Initializer.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\UserTypeController.cs" />
+    <Compile Include="Extension\CryptoExtension.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\NotFoundTextPlain.cs" />
     <Compile Include="Identity\CustomJwtFormat.cs" />
     <Compile Include="Identity\CustomOAuthProvider.cs" />
     <Compile Include="Models\User.cs" />

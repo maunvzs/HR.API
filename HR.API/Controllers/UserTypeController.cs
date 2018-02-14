@@ -4,12 +4,12 @@ using System.Data.Entity;
 
 namespace HR.API.Controllers
 {
+    [Authorize]
     [RoutePrefix("api/UserType")]
     public class UserTypeController : ApiController
     {
         [HttpGet]
         [Route("")]
-        [Authorize(Roles = "Administrator")]
         public async Task<IHttpActionResult> Get()
         {
             using (var context = new HRContext())

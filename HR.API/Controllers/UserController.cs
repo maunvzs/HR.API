@@ -4,6 +4,8 @@ using System.Data.Entity;
 
 namespace HR.API.Controllers
 {
+    [Authorize]
+    [RoutePrefix("api/User")]
     public class UserController : ApiController
     {
         [HttpGet]
@@ -11,7 +13,24 @@ namespace HR.API.Controllers
         {
             using (var context = new HRContext())
             {
-                return Ok(await context.UserEntity.Include(x => x.Name).ToListAsync());
+                var list = await context.UserEntity.ToListAsync();
+                list.ForEach(a => a.Password = string.Empty);
+                return Ok(list);
+            }
+        }
+
+        [HttpGet]
+        public async Task<IHttpActionResult> Get(int id)
+        {
+            using (var context = new HRContext())
+            {
+                var user = await context.UserEntity.FirstOrDefaultAsync(y => y.Id == id);
+
+                if (user is null)
+                    return this.NotFound("User not found");
+
+                user.Password = string.Empty;
+                return Ok(user);
             }
         }
 
@@ -20,7 +39,7 @@ namespace HR.API.Controllers
         {
             using (var context = new HRContext())
             {
-                var userType = await context.UserTypeEntity.FirstOrDefaultAsync(b => b.Id == user.UserType.Id);
+                var userType = await context.UserTypeEntity.FirstOrDefaultAsync(b => b.Id == user.UserTypeId);
                 if (userType == null)
                 {
                     return NotFound();
@@ -28,11 +47,11 @@ namespace HR.API.Controllers
 
                 var newUser = context.UserEntity.Add(new User
                 {
-                    UserType = userType,
+                    UserTypeId = userType.Id,
                     Name = user.Name,
                     LastName = user.LastName,
                     Email = user.Email,
-                    Password = user.Password
+                    Password = user.Password.ToSHA256()
                 });
 
                 await context.SaveChangesAsync();
